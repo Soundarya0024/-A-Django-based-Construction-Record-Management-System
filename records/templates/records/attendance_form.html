@@ -1,0 +1,123 @@
+{% load static %}
+{% load widget_tweaks %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Form</title>
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <div class="card p-4 shadow-sm">
+        <h2 class="mb-4 text-center">
+            {{ form.instance.pk|yesno:"Edit Attendance,Add Attendance" }}
+        </h2>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ field.label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="post" action="">
+            {% csrf_token %}
+
+            <!-- Worker Selection -->
+            <div class="mb-3">
+                {{ form.worker.label_tag }}
+                <select name="{{ form.worker.name }}" id="id_worker" class="form-select">
+                    <option value="">--Select Worker--</option>
+                    {% for worker in form.fields.worker.queryset %}
+                        <option value="{{ worker.id }}" data-type="{{ worker.worker_type }}"
+                        {% if form.instance.worker and worker.id == form.instance.worker.id %}selected{% endif %}>
+                            {{ worker.worker_name }} - {{ worker.project.project_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <div class="mt-2">
+                    <a href="{% url 'worker_create' %}" class="btn btn-success btn-sm">➕ Add Worker</a>
+                    {% if form.instance.worker %}
+                        <a href="{% url 'worker_update' form.instance.worker.id %}" class="btn btn-warning btn-sm">✏️ Edit Selected</a>
+                        <a href="{% url 'worker_delete' form.instance.worker.id %}" class="btn btn-danger btn-sm">🗑️ Delete Selected</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Other Attendance Fields -->
+            <div class="mb-3">
+                {{ form.date.label_tag }}
+                {{ form.date|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                {{ form.members_count.label_tag }}
+                {{ form.members_count|add_class:"form-control" }}
+            </div>
+            <div class="mb-3">
+                {{ form.status.label_tag }}
+                {{ form.status|add_class:"form-select" }}
+            </div>
+            <div class="mb-3">
+                {{ form.remarks.label_tag }}
+                {{ form.remarks|add_class:"form-control" }}
+            </div>
+
+            <!-- Live Daily Wage Display -->
+            <div class="mb-3">
+                <strong>Live Daily Wage: ₹<span id="display_wage">0</span></strong>
+            </div>
+
+            <button type="submit" class="btn btn-primary">💾 Save</button>
+            <a href="{% url 'attendance_list' %}" class="btn btn-secondary">⬅ Back</a>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const membersInput = document.getElementById("id_members_count");
+    const workerInput = document.getElementById("id_worker");
+    const displayWage = document.getElementById("display_wage");
+
+    const wages = {
+        "Mesthri": 1100,
+        "Meson": 1000,
+        "Mamtiyal": 800,
+        "Sittaal": 350,
+        "Painter": 1100,
+        "Electrician": 1200,
+        "Plumber": 1200
+    };
+
+    function updateWage() {
+        const selectedOption = workerInput.selectedOptions[0];
+        const count = parseInt(membersInput.value) || 0;
+
+        if (!selectedOption || !selectedOption.dataset.type) {
+            displayWage.textContent = 0;
+            return;
+        }
+
+        const workerType = selectedOption.dataset.type;
+        displayWage.textContent = count * (wages[workerType] || 0);
+    }
+
+    membersInput.addEventListener("input", updateWage);
+    workerInput.addEventListener("change", updateWage);
+    updateWage(); // initial calculation on page load
+});
+</script>
+
+</body>
+</html>

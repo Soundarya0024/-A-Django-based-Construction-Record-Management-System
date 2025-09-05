@@ -1,0 +1,72 @@
+/* style.css */
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* light grey */
+    margin: 0;
+    padding: 0;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #343a40; /* dark grey */
+}
+
+/* Buttons */
+.btn {
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 5px 0;
+    text-decoration: none;
+}
+
+/* Project/Worker/Material Lists */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul li {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #007bff;
+    margin-left: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
+/* Forms */
+form {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

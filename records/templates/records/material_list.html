@@ -1,0 +1,73 @@
+<!-- material_list.html -->
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Materials</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Materials</h1>
+    <a href="{% url 'home' %}" class="btn btn-secondary mb-3">⬅ Back to Home</a>
+    <a href="{% url 'material_create' %}" class="btn btn-warning mb-3">Add Material</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Material Name</th>
+                <th>Quantity Purchased</th>
+                <th>Quantity Used</th>
+                <th>Quantity Sold</th>
+                <th>Remaining Stock</th>
+                <th>Supplier</th>
+                <th>Purchase Date</th>
+                <th>Cost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.material_name }}</td>
+                <td>{{ material.quantity_purchased }}</td>
+                <td>{{ material.quantity_used }}</td>
+                <td>{{ material.quantity_sold }}</td>
+                <td>{{ material.remaining_stock }}</td>
+                <td>{{ material.supplier_name }}</td>
+                <td>{{ material.purchase_date }}</td>
+                <td>{{ material.cost }}</td>
+                <td>
+                    <a href="{% url 'material_update' material.id %}">Edit</a>
+                    <a href="{% url 'material_delete' material.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9">No materials available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
